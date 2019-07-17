@@ -1,0 +1,20 @@
+version: '3'
+
+services:
+  db:
+    image: postgres
+  web:
+    build: ./Web
+    command: "python manage.py runserver 0.0.0.0:8000"
+    volumes:
+      - ./Web:/code
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+    # entrypoint: "bash /code/migrate.sh"
+  slack_api:
+    build: ./SlackAPI
+    command: "tail -F anything"
+    volumes:
+      - ./SlackAPI:/code
