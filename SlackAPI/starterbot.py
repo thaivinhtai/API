@@ -1,12 +1,13 @@
 import os
 import time
 import re
-from slackclient import SlackClient
+import slack
 from chatbot_engine import ChatbotEngine
 
 
 # instantiate Slack client
-slack_client = SlackClient(os.environ.get('SLACK_BOT_TOKEN'))
+slack_token = 'xoxb-698097631536-698102023152-pfqBYB9xGArAlO15orhjxExw'
+rtmclient = slack.RTMClient(token=slack_token)
 # starterbot's user ID in Slack: value is assigned after the bot starts up
 starterbot_id = None
 
@@ -61,7 +62,7 @@ def handle_command(command, channel):
     response = RESPONSE.response(command)
 
     # Sends the response back to the channel
-    slack_client.api_call(
+    slack_token.api_call(
         "chat.postMessage",
         channel=channel,
         # text=response or default_response
@@ -69,15 +70,34 @@ def handle_command(command, channel):
     )
 
 
+@slack.RTMClient.run_on(event='message')
+def response(**kwargs):
+    print("Starter Bot connected and running!")
+    # Read bot's user ID by calling Web API method `auth.test`
+    starterbot_id = slack_token.api_call("auth.test")["user_id"]
+    while True:
+        command, channel = parse_bot_commands(slack_token.rtm_read())
+        if command:
+            handle_command(command, channel)
+        time.sleep(RTM_READ_DELAY)
+
+
 if __name__ == "__main__":
-    if slack_client.rtm_connect(with_team_state=False):
-        print("Starter Bot connected and running!")
-        # Read bot's user ID by calling Web API method `auth.test`
-        starterbot_id = slack_client.api_call("auth.test")["user_id"]
-        while True:
-            command, channel = parse_bot_commands(slack_client.rtm_read())
-            if command:
-                handle_command(command, channel)
-            time.sleep(RTM_READ_DELAY)
-    else:
-        print("Connection failed. Exception traceback printed above.")
+    # if slack_token.rtm_connect(with_team_state=False):
+    #     print("Starter Bot connected and running!")
+    #     # Read bot's user ID by calling Web API method `auth.test`
+    #     starterbot_id = slack_token.api_call("auth.test")["user_id"]
+    #     while True:
+    #         command, channel = parse_bot_commands(slack_token.rtm_read())
+    #         if command:
+    #             handle_command(command, channel)
+    #         time.sleep(RTM_READ_DELAY)
+    # else:
+    #     print("Connection failed. Exception traceback printed above.")
+    rtmclient.start()
+
+
+# https://github.com/slackapi/python-slackclient/wiki/Migrating-to-2.x
+# https://app.slack.com/client/TLJ2VJKFS/CL6LN0T1Q
+# https://www.fullstackpython.com/blog/build-first-slack-bot-python.html
+# https://chatbotsmagazine.com/contextual-chat-bots-with-tensorflow-4391749d0077?gi=71fda28a39d9
