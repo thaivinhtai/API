@@ -18,3 +18,4 @@ services:
     command: "tail -F anything"
     volumes:
       - ./SlackAPI:/code
+    entrypoint: "python starterbot.py"

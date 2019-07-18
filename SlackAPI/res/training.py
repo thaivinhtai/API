@@ -18,7 +18,7 @@ def main():
     A chatbot framework needs a structure in which conversational intents
     are defined. One clean way to do this is with a JSON file.
     """
-    nltk.download('punkt')
+    # nltk.download('punkt')
     stemmer = LancasterStemmer()
     # import chat-bot intents file
 

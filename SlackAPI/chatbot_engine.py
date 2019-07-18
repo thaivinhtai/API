@@ -11,6 +11,7 @@ import json
 class ChatbotEngine:
 
     def __init__(self):
+        nltk.download('punkt')
         self.stemmer = LancasterStemmer()
 
         # restore all of our data structures
