@@ -20,6 +20,18 @@
          "patterns": ["Who are you?", "What your name?", "Where are you from?" ],
          "responses": ["I am virtual assistant of Intek", "I am Chatbot from Intek"]
         },
+        {"tag": "location",
+         "patterns": ["Who are you?", "What your name?", "Where are you from?" ],
+         "responses": ["I am virtual assistant of Intek", "I am Chatbot from Intek"]
+        },
+        {"tag": "year-old",
+         "patterns": ["How old are you?", "When where you born?"],
+         "responses": ["Less than 1 year old", "I was born when you start this project"]
+        },
+        {"tag": "programing",
+         "patterns": ["Which programming language are you made from?", "How was you made?"],
+         "responses": ["Python, I think"]
+        },
         {"tag": "rental",
          "patterns": ["Can we rent a moped?", "I'd like to rent a moped", "How does this work?" ],
          "responses": ["Are you looking to rent today or later this week?"],
